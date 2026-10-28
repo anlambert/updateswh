@@ -55,6 +55,9 @@ export async function prepareExtensionDir() {
  */
 export async function setup({ proxyPort }) {
     const extensionDir = await prepareExtensionDir();
+    // this environment variable must be set to allow navigation to URL starting
+    // with moz-extension://
+    process.env.MOZ_REMOTE_ALLOW_SYSTEM_ACCESS = '1';
     const browser = await puppeteer.launch({
         browser: "firefox",
         executablePath: EXECUTABLE_PATH,
@@ -72,7 +75,7 @@ export async function setup({ proxyPort }) {
             "network.proxy.share_proxy_settings": false,
             "dom.security.https_first": false,
             "dom.security.https_only_mode": false,
-        },
+        }
     });
     let page;
     try {
